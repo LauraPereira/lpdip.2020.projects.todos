@@ -52,17 +52,18 @@ todosApi.get('/',function (req, res){
 todosApi.post('/', function (req, res) {
   let label = req.body.label;
   let idList = req.body.idList;
-  conn.query("INSERT INTO todos(label, idList) VALUES (?,"+idList+");",[label], function (err, fields) {
+  conn.query("INSERT INTO todos(label, idList, isDone) VALUES (?,?,0);",[label], [idList], function (err, fields) {
     console.log(fields);
     if (err) throw err;
     return res.json({
       id: fields.insertId,
-      label: label,
+      label: label, 
       idList:req.params.id,
-      isDone:fields.isDone,
+      isDone:false,
     });
   });
 });
+
 todosApi.put('/', function (req, res) {
   lab:req.body.label
   lab:req.body.isDone
