@@ -10,20 +10,6 @@ var conn = mysql.createConnection({
   user: "root",
   password: "root"
 });
-
-todosApi.put('/', function (req, res) {
-  let label = req.body.label;
-  let description = req.body.description;
-
-  conn.query("UPDATE lists SET label=? AND description=?;", [label], [description], function (err, fields) {
-    if (err) throw err;
-    return res.json({
-      id: fields.insertId,
-      label: label,
-      description: description,
-    });
-  });
-});
   
 todosApi.get('/',function (req, res){
   var test={};
@@ -52,8 +38,7 @@ todosApi.get('/',function (req, res){
 todosApi.post('/', function (req, res) {
   let label = req.body.label;
   let idList = req.body.idList;
-  conn.query("INSERT INTO todos(label, idList, isDone) VALUES (?,?,0);",[label], [idList], function (err, fields) {
-    console.log(fields);
+  conn.query("INSERT INTO todos(label, idList, isDone) VALUES (?,?,0);",[label, idList], function (err, fields) {
     if (err) throw err;
     return res.json({
       id: fields.insertId,
@@ -64,11 +49,11 @@ todosApi.post('/', function (req, res) {
   });
 });
 
-todosApi.put('/', function (req, res) {
-  lab:req.body.label
-  lab:req.body.isDone
+todosApi.put('/:id', function (req, res) {
+  let label = req.body.label
+  let isDone = req.body.isDone
 
-  conn.query("UPDATE todos SET label=? AND isDone=?;", [label], [isDone], function (err, fields) {
+  conn.query("UPDATE todos SET label=? AND isDone=?;", [label, isDone], function (err, fields) {
     if (err) throw err;
     return res.json({
       id: fields.insertId,
@@ -79,7 +64,7 @@ todosApi.put('/', function (req, res) {
   });
 });
 
-todosApi.delete('/', function (req, res) {
+todosApi.delete('/:id', function (req, res) {
     
     conn.query("DELETE FROM todos;", function (err, fields) {
       if (err) throw err;
