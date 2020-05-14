@@ -31,4 +31,19 @@ listsApi.post('/', function (req, res) {
   });
 });
 
+listsApi.put('/:id', function (req, res) {
+  let label = req.body.label;
+  let description = req.body.description;
+
+  conn.query("UPDATE lists SET label=? AND description=? WHERE id="+req.params.id, [label, description], function (err, fields) {
+    console.log(fields);
+    if (err) throw err;
+    return res.json({
+      id: fields.insertId,
+      label: label,
+      description: description,
+    });
+  });
+});
+
   module.exports = listsApi;
